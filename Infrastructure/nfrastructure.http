@@ -1,0 +1,6 @@
+@nfrastructure_HostAddress = http://localhost:5211
+
+GET {{nfrastructure_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
