@@ -10,7 +10,7 @@ public class ApplicationDbContext: DbContext
     {
     } 
     
-    public DbSet<User> Creators { get; set; }
+    public DbSet<User> Users { get; set; }
     public DbSet<Gender> Gender { get; set; }
     
 }
