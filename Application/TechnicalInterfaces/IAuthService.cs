@@ -6,5 +6,5 @@ namespace AuthMicroservice.Services;
 public interface IAuthService
 {
     RegisterResponseDetails RegisterUser(RegisterRequest user);
-    LoginResponseDetails Login(LoginRequest loginRequest/*, [FromServices] JwtTokenGenerator tokenGenerator*/);
+    LoginResponseDetails Login(LoginRequest loginRequest);
 }
