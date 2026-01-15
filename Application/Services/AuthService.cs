@@ -5,6 +5,7 @@ using AuthMicroservice.Dtos;
 using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
@@ -26,7 +27,7 @@ public class AuthService : IAuthService
         LoginRequestValidator loginValidator,
         IUserRepository userAuth,
         IJWTTokenGenerator tokenGen
-        )
+    )
     {
         _authRepo = authRepo;
         _mapper = mapper;
@@ -34,7 +35,7 @@ public class AuthService : IAuthService
         _loginValidator = loginValidator;
         _tokenGen = tokenGen;
     }
-    
+
     public RegisterResponseDetails RegisterUser(RegisterRequest user)
     {
         try
@@ -57,12 +58,12 @@ public class AuthService : IAuthService
             }
 
             var userRegisterDetails = _mapper.Map<User>(user);
-            
+
             userRegisterDetails.HashedPassword = _passwordHasher.HasherPassword(user.Password);
-            
+
             var createdRecord = _authRepo.AddUser(userRegisterDetails);
 
-            if ((createdRecord =  null) != null)
+            if ((createdRecord = null) != null)
             {
                 Log.Error("User registration failed. Email: {Email}", user.Email);
 
@@ -95,12 +96,56 @@ public class AuthService : IAuthService
 
     public LoginResponseDetails Login(LoginRequest loginRequest)
     {
-        Log.Information("Login attempt for {email}", loginRequest.EmailAddress);
-        var validationResult = _loginValidator.Validate(loginRequest);
-        if(!)
-        
-        
-        
-        throw new NotImplementedException();
+        try
+        {
+            Log.Information("Login attempt for {email}", loginRequest.EmailAddress);
+            var validationResult = _loginValidator.Validate(loginRequest);
+            if (!validationResult.IsValid)
+            {
+                Log.Warning("Validation failed for email: {Email} for this reason: {@Errors}",
+                    loginRequest.EmailAddress, validationResult.Errors);
+
+                return new LoginResponseDetails
+                {
+                    Message = "Please check the request and try again",
+                    IsSuccess = false
+                };
+            }
+            var hashedPassword = IPasswordHashAssist.HasherPassword(loginRequest.Password);
+
+            var user = _authRepo.GetUserByEmail(a => 
+                a.EmailAddress == loginRequest.EmailAddress && 
+                a.HashedPassword == hashedPassword);
+            if (user == null)
+            {
+                Log.Warning("Invalid login attempt for email: {Email}", loginRequest.EmailAddress);
+
+                return new LoginResponseDetails
+                {
+                    Message = "Invalid email or password",
+                    IsSuccess = false
+                };
+            }
+            var token = _tokenGen.GenerateToken(user.EmailAddress);
+
+            Log.Information("User {Email} login successful", user.EmailAddress);
+
+            return new LoginResponseDetails
+            {
+                Message = "Successful",
+                IsSuccess = true,
+                Token = token
+            };
+            throw new NotImplementedException();
+        }
+        catch(Exception ex)
+        {
+            
+            
+            
+            
+            throw new NotImplementedException();
+        }
+
     }
 }
