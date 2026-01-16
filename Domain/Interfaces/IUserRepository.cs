@@ -13,5 +13,5 @@ public interface IUserRepository
     bool DeleteUser(int id);
     bool SaveChanges();
         
-    //User GetBy(Expression<Func<User, bool>> predicate);
+    User GetBy(Expression<Func<User, bool>> predicate);
 }

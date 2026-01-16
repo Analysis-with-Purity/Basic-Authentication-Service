@@ -24,7 +24,6 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Authentication.API", Version = "v1" });
 });
 
-builder.Services.AddAutoMapper(typeof(AuthMappings));
 builder.Services.AddScoped<LoginRequestValidator>();
 builder.Services.AddScoped<RegisterRequestValidator>();
 
@@ -33,6 +32,8 @@ builder.Services.AddScoped<IPasswordHashAssist, PasswordHasherAuth>();
 builder.Services.AddScoped<IJWTTokenGenerator, JWTTokenGenerator>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<JWTTokenGenerator>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

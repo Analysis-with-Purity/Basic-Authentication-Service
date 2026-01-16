@@ -2,7 +2,6 @@ using API.Entities;
 using API.Interfaces;
 using Application.Validators;
 using AuthMicroservice.Dtos;
-using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -14,7 +13,6 @@ namespace AuthMicroservice.Services;
 public class AuthService : IAuthService
 {
     private readonly IUserRepository _authRepo;
-    private readonly IMapper _mapper;
     private readonly IValidator<RegisterRequest> _validator;
     private readonly IValidator<LoginRequest> _loginValidator;
     private readonly IJWTTokenGenerator _tokenGen;
@@ -22,7 +20,6 @@ public class AuthService : IAuthService
 
     public AuthService(
         IUserRepository authRepo,
-        IMapper mapper,
         RegisterRequestValidator requestValidator,
         LoginRequestValidator loginValidator,
         IUserRepository userAuth,
@@ -30,7 +27,6 @@ public class AuthService : IAuthService
     )
     {
         _authRepo = authRepo;
-        _mapper = mapper;
         _validator = requestValidator;
         _loginValidator = loginValidator;
         _tokenGen = tokenGen;
@@ -57,8 +53,20 @@ public class AuthService : IAuthService
                 return response;
             }
 
-            var userRegisterDetails = _mapper.Map<User>(user);
+            
+            //var userRegisterDetails = _mapper.Map<User>(user);
 
+            var userRegisterDetails = new User
+            {
+                Email = user.Email,
+                UserName = user.UserName,
+                PhoneNo = user.PhoneNo,
+                DOB = user.DOB,
+                GenderId = user.GenderId,
+                ProfileImageUrl = user.ProfileImageUrl,
+                HashedPassword = _passwordHasher.HasherPassword(user.Password)
+            };
+            
             userRegisterDetails.HashedPassword = _passwordHasher.HasherPassword(user.Password);
 
             var createdRecord = _authRepo.AddUser(userRegisterDetails);
@@ -98,12 +106,12 @@ public class AuthService : IAuthService
     {
         try
         {
-            Log.Information("Login attempt for {email}", loginRequest.EmailAddress);
+            Log.Information("Login attempt for {email}", loginRequest.Email);
             var validationResult = _loginValidator.Validate(loginRequest);
             if (!validationResult.IsValid)
             {
                 Log.Warning("Validation failed for email: {Email} for this reason: {@Errors}",
-                    loginRequest.EmailAddress, validationResult.Errors);
+                    loginRequest.Email, validationResult.Errors);
 
                 return new LoginResponseDetails
                 {
@@ -111,14 +119,18 @@ public class AuthService : IAuthService
                     IsSuccess = false
                 };
             }
-            var hashedPassword = IPasswordHashAssist.HasherPassword(loginRequest.Password);
-
-            var user = _authRepo.GetUserByEmail(a => 
-                a.EmailAddress == loginRequest.EmailAddress && 
+            var userLoginDetails = _authRepo.GetUserByEmail(loginRequest.Email);
+            var hashedPassword = _passwordHasher.HasherPassword(loginRequest.Password) ;
+            
+            
+            var user = _authRepo.GetBy(a => 
+                a.Email == loginRequest.Email && 
                 a.HashedPassword == hashedPassword);
-            if (user == null)
+            
+           
+            if (userLoginDetails == null)
             {
-                Log.Warning("Invalid login attempt for email: {Email}", loginRequest.EmailAddress);
+                Log.Warning("Invalid login attempt for email: {Email}", loginRequest.Email);
 
                 return new LoginResponseDetails
                 {
@@ -126,9 +138,9 @@ public class AuthService : IAuthService
                     IsSuccess = false
                 };
             }
-            var token = _tokenGen.GenerateToken(user.EmailAddress);
+            var token = _tokenGen.GenerateToken(user.Email);
 
-            Log.Information("User {Email} login successful", user.EmailAddress);
+            Log.Information("User {Email} login successful", user.Email);
 
             return new LoginResponseDetails
             {

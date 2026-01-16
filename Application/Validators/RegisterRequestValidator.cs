@@ -9,7 +9,7 @@ public class RegisterRequestValidator: AbstractValidator<RegisterRequest>
     {
 
         RuleFor(x => x.Email)
-            .NotEmpty().WithMessage("EmailAddress cannot be empty")
+            .NotEmpty().WithMessage("Email cannot be empty")
             .EmailAddress().WithMessage("Invalid email format");
 
         RuleFor(x => x.UserName)

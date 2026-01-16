@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/user/Documents/C#/AuthMicroservice/AuthMicroservice/Infrastructure/Infrastructure.csproj": {}
+    "/Users/user/Documents/C#/Blogging Application Suit/AuthMicroservice/AuthMicroservice/Infrastructure/Infrastructure.csproj": {}
   },
   "projects": {
-    "/Users/user/Documents/C#/AuthMicroservice/AuthMicroservice/Application/Application.csproj": {
+    "/Users/user/Documents/C#/Blogging Application Suit/AuthMicroservice/AuthMicroservice/Application/Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/user/Documents/C#/AuthMicroservice/AuthMicroservice/Application/Application.csproj",
+        "projectUniqueName": "/Users/user/Documents/C#/Blogging Application Suit/AuthMicroservice/AuthMicroservice/Application/Application.csproj",
         "projectName": "Application",
-        "projectPath": "/Users/user/Documents/C#/AuthMicroservice/AuthMicroservice/Application/Application.csproj",
+        "projectPath": "/Users/user/Documents/C#/Blogging Application Suit/AuthMicroservice/AuthMicroservice/Application/Application.csproj",
         "packagesPath": "/Users/user/.nuget/packages/",
-        "outputPath": "/Users/user/Documents/C#/AuthMicroservice/AuthMicroservice/Application/obj/",
+        "outputPath": "/Users/user/Documents/C#/Blogging Application Suit/AuthMicroservice/AuthMicroservice/Application/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/user/.nuget/NuGet/NuGet.Config"
@@ -26,8 +26,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/user/Documents/C#/AuthMicroservice/AuthMicroservice/Domain/Domain.csproj": {
-                "projectPath": "/Users/user/Documents/C#/AuthMicroservice/AuthMicroservice/Domain/Domain.csproj"
+              "/Users/user/Documents/C#/Blogging Application Suit/AuthMicroservice/AuthMicroservice/Domain/Domain.csproj": {
+                "projectPath": "/Users/user/Documents/C#/Blogging Application Suit/AuthMicroservice/AuthMicroservice/Domain/Domain.csproj"
               }
             }
           }
@@ -47,14 +47,6 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "AutoMapper": {
-              "target": "Package",
-              "version": "[16.0.0, )"
-            },
-            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
-              "target": "Package",
-              "version": "[12.0.1, )"
-            },
             "FluentValidation": {
               "target": "Package",
               "version": "[12.1.1, )"
@@ -122,14 +114,14 @@
         }
       }
     },
-    "/Users/user/Documents/C#/AuthMicroservice/AuthMicroservice/Domain/Domain.csproj": {
+    "/Users/user/Documents/C#/Blogging Application Suit/AuthMicroservice/AuthMicroservice/Domain/Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/user/Documents/C#/AuthMicroservice/AuthMicroservice/Domain/Domain.csproj",
+        "projectUniqueName": "/Users/user/Documents/C#/Blogging Application Suit/AuthMicroservice/AuthMicroservice/Domain/Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "/Users/user/Documents/C#/AuthMicroservice/AuthMicroservice/Domain/Domain.csproj",
+        "projectPath": "/Users/user/Documents/C#/Blogging Application Suit/AuthMicroservice/AuthMicroservice/Domain/Domain.csproj",
         "packagesPath": "/Users/user/.nuget/packages/",
-        "outputPath": "/Users/user/Documents/C#/AuthMicroservice/AuthMicroservice/Domain/obj/",
+        "outputPath": "/Users/user/Documents/C#/Blogging Application Suit/AuthMicroservice/AuthMicroservice/Domain/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/user/.nuget/NuGet/NuGet.Config"
@@ -161,14 +153,6 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "AutoMapper": {
-              "target": "Package",
-              "version": "[16.0.0, )"
-            },
-            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
-              "target": "Package",
-              "version": "[12.0.1, )"
-            },
             "FluentValidation": {
               "target": "Package",
               "version": "[12.1.1, )"
@@ -236,14 +220,14 @@
         }
       }
     },
-    "/Users/user/Documents/C#/AuthMicroservice/AuthMicroservice/Infrastructure/Infrastructure.csproj": {
+    "/Users/user/Documents/C#/Blogging Application Suit/AuthMicroservice/AuthMicroservice/Infrastructure/Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/user/Documents/C#/AuthMicroservice/AuthMicroservice/Infrastructure/Infrastructure.csproj",
+        "projectUniqueName": "/Users/user/Documents/C#/Blogging Application Suit/AuthMicroservice/AuthMicroservice/Infrastructure/Infrastructure.csproj",
         "projectName": "Infrastructure",
-        "projectPath": "/Users/user/Documents/C#/AuthMicroservice/AuthMicroservice/Infrastructure/Infrastructure.csproj",
+        "projectPath": "/Users/user/Documents/C#/Blogging Application Suit/AuthMicroservice/AuthMicroservice/Infrastructure/Infrastructure.csproj",
         "packagesPath": "/Users/user/.nuget/packages/",
-        "outputPath": "/Users/user/Documents/C#/AuthMicroservice/AuthMicroservice/Infrastructure/obj/",
+        "outputPath": "/Users/user/Documents/C#/Blogging Application Suit/AuthMicroservice/AuthMicroservice/Infrastructure/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/user/.nuget/NuGet/NuGet.Config"
@@ -258,11 +242,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/user/Documents/C#/AuthMicroservice/AuthMicroservice/Application/Application.csproj": {
-                "projectPath": "/Users/user/Documents/C#/AuthMicroservice/AuthMicroservice/Application/Application.csproj"
+              "/Users/user/Documents/C#/Blogging Application Suit/AuthMicroservice/AuthMicroservice/Application/Application.csproj": {
+                "projectPath": "/Users/user/Documents/C#/Blogging Application Suit/AuthMicroservice/AuthMicroservice/Application/Application.csproj"
               },
-              "/Users/user/Documents/C#/AuthMicroservice/AuthMicroservice/Domain/Domain.csproj": {
-                "projectPath": "/Users/user/Documents/C#/AuthMicroservice/AuthMicroservice/Domain/Domain.csproj"
+              "/Users/user/Documents/C#/Blogging Application Suit/AuthMicroservice/AuthMicroservice/Domain/Domain.csproj": {
+                "projectPath": "/Users/user/Documents/C#/Blogging Application Suit/AuthMicroservice/AuthMicroservice/Domain/Domain.csproj"
               }
             }
           }
@@ -282,10 +266,6 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "AutoMapper": {
-              "target": "Package",
-              "version": "[16.0.0, )"
-            },
             "FluentValidation": {
               "target": "Package",
               "version": "[12.1.1, )"

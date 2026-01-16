@@ -7,7 +7,7 @@ public class RegisterRequest
     [Required(ErrorMessage = "UserName cannot be empty")]
     public string UserName { get; set; }
     
-    [Required(ErrorMessage = "EmailAddress cannot be empty")]
+    [Required(ErrorMessage = "Email cannot be empty")]
     public string Email { get; set; }
     
     [Required(ErrorMessage = "phoneNo cannot be empty")]
