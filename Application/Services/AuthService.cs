@@ -3,9 +3,6 @@ using API.Interfaces;
 using Application.Validators;
 using AuthMicroservice.Dtos;
 using FluentValidation;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
 namespace AuthMicroservice.Services;
@@ -22,39 +19,33 @@ public class AuthService : IAuthService
         IUserRepository authRepo,
         RegisterRequestValidator requestValidator,
         LoginRequestValidator loginValidator,
-        IUserRepository userAuth,
-        IJWTTokenGenerator tokenGen
+        IJWTTokenGenerator tokenGen,
+        IPasswordHashAssist passwordHasher
     )
     {
         _authRepo = authRepo;
         _validator = requestValidator;
         _loginValidator = loginValidator;
         _tokenGen = tokenGen;
+        _passwordHasher = passwordHasher;
     }
 
     public RegisterResponseDetails RegisterUser(RegisterRequest user)
     {
         try
         {
-            Log.Information("User Registration started. Email address: {Email}", user.Email);
+            Log.Information("User Registration started. Email: {Email}", user.Email);
 
-            var response = new RegisterResponseDetails();
             var validationResult = _validator.Validate(user);
-
             if (!validationResult.IsValid)
             {
-                Log.Warning("Validation failed for this reason: {@Errors}", validationResult.Errors);
-
-                response.Message = "Validation failed";
-                response.Errors = validationResult.Errors
-                    .Select(e => e.ErrorMessage)
-                    .ToList();
-
-                return response;
+                return new RegisterResponseDetails
+                {
+                    Message = "Validation failed",
+                    Errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList(),
+                    IsSuccess = false
+                };
             }
-
-            
-            //var userRegisterDetails = _mapper.Map<User>(user);
 
             var userRegisterDetails = new User
             {
@@ -66,12 +57,10 @@ public class AuthService : IAuthService
                 ProfileImageUrl = user.ProfileImageUrl,
                 HashedPassword = _passwordHasher.HasherPassword(user.Password)
             };
-            
-            userRegisterDetails.HashedPassword = _passwordHasher.HasherPassword(user.Password);
 
             var createdRecord = _authRepo.AddUser(userRegisterDetails);
 
-            if ((createdRecord = null) != null)
+            if (createdRecord == null)
             {
                 Log.Error("User registration failed. Email: {Email}", user.Email);
 
@@ -86,13 +75,13 @@ public class AuthService : IAuthService
 
             return new RegisterResponseDetails
             {
-                Message = "Entered successfully.",
+                Message = "Registered successfully",
                 IsSuccess = true
             };
         }
         catch (Exception ex)
         {
-            Log.Fatal(ex, "Unexpected error during user registration for Email: {Email}", user.Email);
+            Log.Fatal(ex, "Unexpected error during registration. Email: {Email}", user.Email);
 
             return new RegisterResponseDetails
             {
@@ -106,31 +95,27 @@ public class AuthService : IAuthService
     {
         try
         {
-            Log.Information("Login attempt for {email}", loginRequest.Email);
+            Log.Information("Login attempt for {Email}", loginRequest.Email);
+
             var validationResult = _loginValidator.Validate(loginRequest);
             if (!validationResult.IsValid)
             {
-                Log.Warning("Validation failed for email: {Email} for this reason: {@Errors}",
-                    loginRequest.Email, validationResult.Errors);
-
                 return new LoginResponseDetails
                 {
-                    Message = "Please check the request and try again",
+                    Message = "Invalid login request",
                     IsSuccess = false
                 };
             }
-            var userLoginDetails = _authRepo.GetUserByEmail(loginRequest.Email);
-            var hashedPassword = _passwordHasher.HasherPassword(loginRequest.Password) ;
-            
-            
-            var user = _authRepo.GetBy(a => 
-                a.Email == loginRequest.Email && 
-                a.HashedPassword == hashedPassword);
-            
-           
-            if (userLoginDetails == null)
+
+            var hashedPassword = _passwordHasher.HasherPassword(loginRequest.Password);
+
+            var user = _authRepo.GetBy(u =>
+                u.Email == loginRequest.Email &&
+                u.HashedPassword == hashedPassword);
+
+            if (user == null)
             {
-                Log.Warning("Invalid login attempt for email: {Email}", loginRequest.Email);
+                Log.Warning("Invalid login attempt for {Email}", loginRequest.Email);
 
                 return new LoginResponseDetails
                 {
@@ -138,26 +123,27 @@ public class AuthService : IAuthService
                     IsSuccess = false
                 };
             }
+
             var token = _tokenGen.GenerateToken(user.Email);
 
-            Log.Information("User {Email} login successful", user.Email);
+            Log.Information("User {Email} logged in successfully", user.Email);
 
             return new LoginResponseDetails
             {
-                Message = "Successful",
+                Message = "Login successful",
                 IsSuccess = true,
                 Token = token
             };
-            throw new NotImplementedException();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
-            
-            
-            
-            
-            throw new NotImplementedException();
-        }
+            Log.Error(ex, "Login failed for {Email}", loginRequest.Email);
 
+            return new LoginResponseDetails
+            {
+                Message = "An unexpected error occurred",
+                IsSuccess = false
+            };
+        }
     }
 }
