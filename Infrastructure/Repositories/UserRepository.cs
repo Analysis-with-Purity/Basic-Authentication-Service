@@ -45,16 +45,23 @@ public class UserRepository : IUserRepository
 
     public EntityEntry<User> AddUser(User user)
     {
-        try
+        var existingUser = GetUserByEmail(user.Email);
+        if (existingUser == null)
         {
-            return _db.Users.Add(user);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error in AddUser: {ex.Message}");
-            return null;
-        }
+            try
+            {
+                return _db.Users.Add(user);
 
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in AddUser: {ex.Message}");
+                return null;
+            }
+            
+        }
+        Console.WriteLine($"User with this email address: {existingUser.Email} exists");
+        return null;
     }
 
     public bool UpdateUser(User user)

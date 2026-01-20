@@ -10,21 +10,21 @@ namespace AuthMicroservice.Services;
 public class AuthService : IAuthService
 {
     private readonly IUserRepository _authRepo;
-    private readonly IValidator<RegisterRequest> _validator;
+    private readonly IValidator<RegisterRequest> _requestValidator;
     private readonly IValidator<LoginRequest> _loginValidator;
     private readonly IJWTTokenGenerator _tokenGen;
     private readonly IPasswordHashAssist _passwordHasher;
 
     public AuthService(
         IUserRepository authRepo,
-        RegisterRequestValidator requestValidator,
+        RegisterRequestValidator requestRequestValidator,
         LoginRequestValidator loginValidator,
         IJWTTokenGenerator tokenGen,
         IPasswordHashAssist passwordHasher
     )
     {
         _authRepo = authRepo;
-        _validator = requestValidator;
+        _requestValidator = requestRequestValidator;
         _loginValidator = loginValidator;
         _tokenGen = tokenGen;
         _passwordHasher = passwordHasher;
@@ -36,7 +36,7 @@ public class AuthService : IAuthService
         {
             Log.Information("User Registration started. Email: {Email}", user.Email);
 
-            var validationResult = _validator.Validate(user);
+            var validationResult = _requestValidator.Validate(user);
             if (!validationResult.IsValid)
             {
                 return new RegisterResponseDetails
